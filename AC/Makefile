@@ -5,6 +5,7 @@ POWERAC_DIR = ../../powerac
 INCLUDE_PATH = -I./include/common \
 			   -I./include/net80211 \
 			   -I./include/sys \
+			   -I../head/ \
 
 SOURCES_PATH = ./source: \
 
