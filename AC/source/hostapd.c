@@ -6538,7 +6538,7 @@ void handle_msg()
     int len = 3000;
     recv(sock, buf, len, 0);
     printf("recv buf\n", buf);
-
+#if 0
 	switch(VmProcState()){
 	case AC_PROC_WORK :
 		switch(wEvent){
@@ -6973,7 +6973,7 @@ void handle_msg()
 	default :
 		break ;
 	}
-
+#endif
 	return ;
 }
 #if 0
