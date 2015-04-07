@@ -5,9 +5,6 @@
 extern          "C" {
 #endif
 
-NETSNMP_IMPORT int   getopt(int, char *const *, const char *);
-NETSNMP_IMPORT char *optarg;
-NETSNMP_IMPORT int   optind, opterr, optopt, optreset;
 
 #ifdef __cplusplus
 }

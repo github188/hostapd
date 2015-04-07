@@ -13,7 +13,6 @@
 #define  _AC_PUBLIC_H
 
 /* 包含系统头文件 */
-#include "OssApi.h"
 
 /* 类型定义 */
 #if defined (_OSWIN32_)

@@ -60,7 +60,6 @@ struct hostapd_acbss_stats{
 };
 
 
-void print_stats_all(VOID);
 
 #define hostapd_acbss_stats_inc(_bss,_value)	((_bss)->vap_stats._value++)
 

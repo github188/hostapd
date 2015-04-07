@@ -15,8 +15,6 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-#include "OssApi.h"
-#include "ac_public.h"
 #include "os.h"
 
 #ifdef __linux__

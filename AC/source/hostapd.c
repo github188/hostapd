@@ -14,7 +14,6 @@
 
 #include "includes.h"
 
-#include "OssApi.h"
 #include "ac_public.h"
 //#include "ac_db_kernel.h"
 //#include "ac_db_table.h"
@@ -69,6 +68,19 @@
 #include "syslogu.h"
 /*end TASK #476 fangz 2013.2.25 log*/
 
+/* add by fangz for sock recv msg */
+int g_sock;
+void socket_register()
+{
+    struct sockaddr_in sock_addr;
+    g_sock = socket(PF_INET, SOCK_DGRAM,0);
+    sock_addr.sin_family = AF_INET;
+    sock_addr.sin_port = htons(2222);
+    sock_addr.sin_addr.s_addr = 0; 
+    bind(g_sock, (struct sockaddr*)&sock_addr, sizeof(struct sockaddr));
+    eloop_register_read_sock(g_sock, handle_msg, NULL, NULL);
+}
+/* end fangz*/
 
 #if 0
 struct hapd_interfaces {
@@ -6520,43 +6532,14 @@ static void DumpDevices(VOID)
 	}
 }
 
-void ProcEntryHostapdAc(WORD16 wEvent,
-						BYTE *pbyBody,
-						WORD16 wLen,
-						BYTE *pbyResv,
-						WORD16 wResv,
-						BYTE *pbyProcData)
+void handle_msg()
 {
-	TPID	stPid;
-    /* u16 usWtpId ; */
-	
+    char buf[3000];
+    int len = 3000;
+    recv(sock, buf, len, 0);
+    printf("recv buf\n", buf);
+
 	switch(VmProcState()){
-	case AC_PROC_IDLE :
-		switch(wEvent){
-		case EV_MASTER_POWERON :/*初始化：获取所有设备配置信息，存储处理*/
-			ModuleLogMsg(APP_MODULE_HOSTAPD, APP_MSG,
-				"%s, receive event(%u): EV_MASTER_POWERON.\n", __func__, wEvent) ;
-
-			if(! OnMasterPowerOn()){
-				ModuleLogMsg(APP_MODULE_HOSTAPD, APP_FATAL,
-					"%s, power on failed.\n", __func__) ;
-				VmPowerOnAck(FALSE) ;
-			}
-			else{
-				ModuleLogMsg(APP_MODULE_HOSTAPD, APP_MSG,
-					"%s, power on success.\n", __func__) ;
-				VmProcUpdateState(AC_PROC_WORK);
-				VmPowerOnAck(TRUE) ;
-			}
-			DumpDevices() ;
-
-			HostapdTest() ;
-
-			return ;
-		default :
-			break ;
-		}
-		break ;
 	case AC_PROC_WORK :
 		switch(wEvent){
 		case AC_DEVM_RADIUS_CONFIG_UPDATE_IND_MSG :{
@@ -6993,7 +6976,7 @@ void ProcEntryHostapdAc(WORD16 wEvent,
 
 	return ;
 }
-
+#if 0
 void ProcEntryHostapdAcDaemon(WORD16 wEvent,
 						BYTE *pbyBody,
 						WORD16 wLen,
@@ -7022,4 +7005,30 @@ void ProcEntryHostapdAcDaemon(WORD16 wEvent,
 	eloop_destroy();
 
 	return ;
+}
+#endif
+
+int main(int argc, char *argv[])
+{
+    if(! OnMasterPowerOn())
+    {
+        ModuleLogMsg(APP_MODULE_HOSTAPD, APP_FATAL,
+                "%s, power on failed.\n", __func__) ;
+    }
+    DumpDevices();
+    HostapdTest();
+
+    char *pid_file = "/tmp/hostapd.pid";
+    
+    eloop_init();
+    
+    if (daemonize && os_daemonize(pid_file)) 
+    {
+        perror("daemon");
+        goto out;
+    }
+    socket_register();
+    eloop_run();
+out:
+    
 }
