@@ -1,0 +1,36 @@
+* DATA STRUCT
+** WTP
+| REDIS KEY          | TYPE | RANGE |
+|--------------------+------+-------|
+| wtpnum             | int  |       |
+| wtp: /$num/:status | int  | 0,1   |
+| wtp: /$num/:ID     | int  |       |
+| wtp: /$num/:ifnum  | int  |       |
+
+** IF
+| REDIS KEY                    | TYPE | RANGE |
+|------------------------------+------+-------|
+| wtp: /$num/:if: /$num/:wtpid | int  |       |
+| wtp: /$num/:if: /$num/:devid | int  |       |
+| wtp: /$num/:if: /$num/:ifid  | int  |       |
+
+** VAP
+| REDIS KEY                                             | TYPE          | RANGE |
+|-------------------------------------------------------+---------------+-------|
+| wtp: /$num/:if: /$num/:vap: /$num/:wtpid              | int           |       |
+| wtp: /$num/:if: /$num/:vap: /$num/:ifid               | int           |       |
+| wtp: /$num/:if: /$num/:vap: /$num/:vapid              | int           |       |
+| wtp: /$num/:if: /$num/:vap: /$num/:ifname             | char          |       |
+| wtp: /$num/:if: /$num/:vap: /$num/:bssid              | unsigned char |       |
+| wtp: /$num/:if: /$num/:vap: /$num/:ssid               | char          |       |
+| wtp: /$num/:if: /$num/:vap: /$num/:authType           | int           |       |
+| wtp: /$num/:if: /$num/:vap: /$num/:encrypt            | int           |       |
+| wtp: /$num/:if: /$num/:vap: /$num/:wpaRekeyPeriod     | int           |       |
+| wtp: /$num/:if: /$num/:vap: /$num/:wpakey             | char          |    64 |
+| wtp: /$num/:if: /$num/:vap: /$num/:8021x              | int           |       |
+| wtp: /$num/:if: /$num/:vap: /$num/:eapolVer           | int           |       |
+| wtp: /$num/:if: /$num/:vap: /$num/:eapAuthPeriod      | int           |       |
+| wtp: /$num/:if: /$num/:vap: /$num/:wepBroadcastKeyLen | int           |       |
+| wtp: /$num/:if: /$num/:vap: /$num/:wepUnicastKeyLen |               |       |
+
+* RADIUS
